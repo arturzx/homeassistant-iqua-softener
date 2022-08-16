@@ -1,0 +1,13 @@
+{
+  "domain": "iqua_softener",
+  "name": "iQua Softener",
+  "documentation": "https://github.com/arturzx/homeassistant-iqua-softener/",
+  "issue_tracker": "https://github.com/arturzx/homeassistant-iqua-softener/issues",
+  "dependencies": [],
+  "codeowners": ["@arturzx"],
+  "requirements": ["iqua_softener~=1.0.2"],
+  "config_flow": true,
+  "iot_class": "cloud_polling",
+  "loggers": ["iqua"],
+  "version": "1.0.0"
+}

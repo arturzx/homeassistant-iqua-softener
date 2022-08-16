@@ -1,0 +1,15 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "username": "Username",
+          "password": "Password",
+          "device_sn": "Serial Number"
+        },
+        "description": "Enter your iQua credentials and device serial number.",
+        "title": "Setup"
+      }
+    }
+  }
+}
