@@ -49,7 +49,10 @@ async def async_setup_entry(
         config.update(config_entry.options)
     device_serial_number = config[CONF_DEVICE_SERIAL_NUMBER]
     coordinator = IquaSoftenerCoordinator(
-        hass, IquaSoftener(config[CONF_USERNAME], config[CONF_PASSWORD], device_serial_number)
+        hass,
+        IquaSoftener(
+            config[CONF_USERNAME], config[CONF_PASSWORD], device_serial_number
+        ),
     )
     await coordinator.async_config_entry_first_refresh()
     sensors = [
@@ -183,7 +186,7 @@ class IquaSoftenerStateSensor(IquaSoftenerSensor):
 
 class IquaSoftenerDeviceDateTimeSensor(IquaSoftenerSensor):
     def update(self, data: IquaSoftenerData):
-        self._attr_native_value = data.device_date_time.strftime('%Y-%m-%d %H:%M:%S')
+        self._attr_native_value = data.device_date_time.strftime("%Y-%m-%d %H:%M:%S")
 
 
 class IquaSoftenerLastRegenerationSensor(IquaSoftenerSensor):
@@ -210,16 +213,16 @@ class IquaSoftenerSaltLevelSensor(IquaSoftenerSensor):
     def icon(self) -> str | None:
         if self._attr_native_value is not None:
             if self._attr_native_value > 75:
-                return 'mdi:signal-cellular-3'
+                return "mdi:signal-cellular-3"
             elif self._attr_native_value > 50:
-                return 'mdi:signal-cellular-2'
+                return "mdi:signal-cellular-2"
             elif self._attr_native_value > 25:
-                return 'mdi:signal-cellular-1'
+                return "mdi:signal-cellular-1"
             elif self._attr_native_value > 5:
-                return 'mdi:signal-cellular-outline'
-            return 'mdi:signal-off'
+                return "mdi:signal-cellular-outline"
+            return "mdi:signal-off"
         else:
-            return 'mdi:signal'
+            return "mdi:signal"
 
 
 class IquaSoftenerAvailableWaterSensor(IquaSoftenerSensor):
