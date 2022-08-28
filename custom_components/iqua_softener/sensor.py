@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 import logging
+from typing import Optional
 
 from homeassistant.core import callback
 from homeassistant.helpers.update_coordinator import (
@@ -210,7 +211,7 @@ class IquaSoftenerSaltLevelSensor(IquaSoftenerSensor):
         self._attr_native_value = data.salt_level_percent
 
     @property
-    def icon(self) -> str | None:
+    def icon(self) -> Optional[str]:
         if self._attr_native_value is not None:
             if self._attr_native_value > 75:
                 return "mdi:signal-cellular-3"
