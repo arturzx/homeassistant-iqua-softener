@@ -33,7 +33,7 @@ class IquaSoftenerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self.data = user_input
             return self.async_create_entry(
-                title="iQua " + self.data[CONF_DEVICE_SERIAL_NUMBER], data=self.data
+                title=f"iQua {self.data[CONF_DEVICE_SERIAL_NUMBER]}", data=self.data
             )
 
         return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA_USER)

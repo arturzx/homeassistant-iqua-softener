@@ -24,7 +24,8 @@ from homeassistant.components.sensor import (
     SensorStateClass,
     SensorEntityDescription,
 )
-from homeassistant.const import PERCENTAGE, VOLUME_LITERS, VOLUME_GALLONS
+from homeassistant.const import PERCENTAGE
+from homeassistant.const import UnitOfVolume
 
 from .const import (
     DOMAIN,
@@ -102,6 +103,7 @@ async def async_setup_entry(
                     key="AVAILABLE_WATER",
                     name="Available water",
                     state_class=SensorStateClass.TOTAL,
+                    device_class=SensorDeviceClass.WATER,
                     icon="mdi:water",
                 ),
             ),
@@ -119,7 +121,8 @@ async def async_setup_entry(
                 SensorEntityDescription(
                     key="WATER_USAGE_TODAY",
                     name="Today water usage",
-                    state_class=SensorStateClass.TOTAL,
+                    state_class=SensorStateClass.TOTAL_INCREASING,
+                    device_class=SensorDeviceClass.WATER,
                     icon="mdi:water-minus",
                 ),
             ),
@@ -129,6 +132,7 @@ async def async_setup_entry(
                     key="WATER_USAGE_DAILY_AVERAGE",
                     name="Water usage daily average",
                     state_class=SensorStateClass.MEASUREMENT,
+                    device_class=SensorDeviceClass.WATER,
                 ),
             ),
         )
@@ -228,11 +232,15 @@ class IquaSoftenerSaltLevelSensor(IquaSoftenerSensor):
 
 class IquaSoftenerAvailableWaterSensor(IquaSoftenerSensor):
     def update(self, data: IquaSoftenerData):
-        self._attr_native_value = data.total_water_available
-        self._attr_native_unit_of_measurement = (
-            VOLUME_LITERS
+        self._attr_native_value = data.total_water_available / (
+            1000
             if data.volume_unit == IquaSoftenerVolumeUnit.LITERS
-            else VOLUME_GALLONS
+            else 1
+        )
+        self._attr_native_unit_of_measurement = (
+            UnitOfVolume.CUBIC_METERS
+            if data.volume_unit == IquaSoftenerVolumeUnit.LITERS
+            else UnitOfVolume.GALLONS
         )
         self._attr_last_reset = datetime.now(data.device_date_time.tzinfo) - timedelta(
             days=data.days_since_last_regeneration
@@ -251,22 +259,27 @@ class IquaSoftenerWaterCurrentFlowSensor(IquaSoftenerSensor):
 
 class IquaSoftenerWaterUsageTodaySensor(IquaSoftenerSensor):
     def update(self, data: IquaSoftenerData):
-        self._attr_native_value = data.today_use
-        self._attr_native_unit_of_measurement = (
-            VOLUME_LITERS
+        self._attr_native_value = data.today_use / (
+            1000
             if data.volume_unit == IquaSoftenerVolumeUnit.LITERS
-            else VOLUME_GALLONS
+            else 1
         )
-        self._attr_last_reset = datetime.now(data.device_date_time.tzinfo).replace(
-            hour=0, minute=0, second=0
+        self._attr_native_unit_of_measurement = (
+            UnitOfVolume.CUBIC_METERS
+            if data.volume_unit == IquaSoftenerVolumeUnit.LITERS
+            else UnitOfVolume.GALLONS
         )
 
 
 class IquaSoftenerWaterUsageDailyAverageSensor(IquaSoftenerSensor):
     def update(self, data: IquaSoftenerData):
-        self._attr_native_value = data.average_daily_use
-        self._attr_native_unit_of_measurement = (
-            VOLUME_LITERS
+        self._attr_native_value = data.average_daily_use / (
+            1000
             if data.volume_unit == IquaSoftenerVolumeUnit.LITERS
-            else VOLUME_GALLONS
+            else 1
+        )
+        self._attr_native_unit_of_measurement = (
+            UnitOfVolume.CUBIC_METERS
+            if data.volume_unit == IquaSoftenerVolumeUnit.LITERS
+            else UnitOfVolume.GALLONS
         )
