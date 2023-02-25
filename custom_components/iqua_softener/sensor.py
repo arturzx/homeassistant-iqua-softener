@@ -38,7 +38,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-UPDATE_INTERVAL = timedelta(seconds=5)
+UPDATE_INTERVAL = timedelta(minutes=5)
 
 
 async def async_setup_entry(
